@@ -1,0 +1,140 @@
+//デバッグ用メッセージ
+//msgMPC_Data.msgに入れる
+
+float64 p
+float64 q
+float64 r
+
+float64 xacc
+float64 yacc
+float64 zacc
+
+float64 ori_x
+float64 ori_y
+float64 ori_z
+float64 ori_w
+
+float64 roll
+float64 pitch
+float64 yaw
+
+float64 xpos
+float64 ypos
+float64 zpos
+
+float64 xvel
+float64 yvel
+float64 zvel
+
+float64 uroll
+float64 upitch
+float64 uthr
+float64 uyaw
+
+int16   sw
+
+float64 ctrl_input_phi
+float64 ctrl_input_theta
+float64 ctrl_input_psi
+float64 ctrl_input_thrust
+
+float64 Xe_ob_x
+float64 Xe_ob_y
+float64 Xe_ob_z
+float64 Xe_ob_vx
+float64 Xe_ob_vy
+float64 Xe_ob_vz
+float64 Xe_ob_ax
+float64 Xe_ob_ay
+float64 Xe_ob_az
+
+float64 U0
+float64 U1
+float64 U2
+float64 U3
+float64 U4
+float64 U5
+float64 U6
+float64 U7
+float64 U8
+float64 U9
+float64 U10
+float64 U11
+float64 U12
+float64 U13
+float64 U14
+float64 U15
+float64 U16
+float64 U17
+float64 U18
+float64 U19
+float64 U20
+float64 U21
+float64 U22
+float64 U23
+float64 U24
+float64 U25
+float64 U26
+float64 U27
+float64 U28
+float64 U29
+float64 U30
+float64 U31
+float64 U32
+float64 U33
+float64 U34
+float64 U35
+float64 U36
+float64 U37
+float64 U38
+float64 U39
+float64 U40
+float64 U41
+float64 U42
+float64 U43
+float64 U44
+float64 U45
+float64 U46
+float64 U47
+float64 U48
+float64 U49
+float64 U50
+float64 U51
+float64 U52
+float64 U53
+float64 U54
+float64 U55
+float64 U56
+float64 U57
+float64 U58
+float64 U59
+float64 U60
+float64 U61
+float64 U62
+float64 U63
+float64 U64
+float64 U65
+float64 U66
+float64 U67
+float64 U68
+float64 U69
+float64 U70
+float64 U71
+float64 U72
+float64 U73
+float64 U74
+float64 U75
+float64 U76
+float64 U77
+float64 U78
+float64 U79
+
+float64 old_X_x
+float64 old_X_y
+float64 old_X_z
+float64 old_X_vx
+float64 old_X_vy
+float64 old_X_vz
+float64 old_X_ax
+float64 old_X_ay
+float64 old_X_az

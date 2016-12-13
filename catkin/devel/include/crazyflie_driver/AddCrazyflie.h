@@ -40,7 +40,7 @@ template<>
 struct MD5Sum< ::crazyflie_driver::AddCrazyflie > {
   static const char* value()
   {
-    return "ecc01ed9b37cee7a67ca59fc53aeb029";
+    return "5b59a3ab8b313e5f8ea146f7129a4bf5";
   }
 
   static const char* value(const ::crazyflie_driver::AddCrazyflie&) { return value(); }
