@@ -1,23 +1,24 @@
 #include <ros/ros.h>
 #include <sensor_msgs/Joy.h>
 
-#include "GdnCont.h" //Guidance
-#include "stateModelStructure.h"
+#include "mpc.h"
+#include "stateData.h"
 #include "estimate/msgCrazyflie_data.h"
 #include <hector_quadrotor_teleop/adv_cmd_vel.h>
-#include "mpc/msgMPC_Input.h"
-#include "mpc/msgMPC_Data.h"
+#include "mpc/msgMpc_input.h"
+#include "mpc/msgMpc_data.h"
 #include "generate_reference/msgReference.h"
 
-MPCData stateData;
+StateData stateData;
 
 double xRef = 0.0, yRef = 0.0, zRef = 0.0;
 double rollDesired = 0.0, pitchDesired = 0.0,yawRateDesired = 0.0,thrustDesired = 0.0;
 double offset_phi, offset_the, offset_thr;
-int controlFlag = 0, refPosFlag = 0;
+int controlFlag = 0, newRefFlag = 0;
 
 // Timing
 ros::Time startTime, endTime;
+ros::Duration dtCont;
 
 // Publishers
 ros::Publisher pubMpcInput;
@@ -27,26 +28,27 @@ ros::Publisher pubMpcData;
 ros::Subscriber subGetControlMode;
 ros::Subscriber subGetRef;
 ros::Subscriber subGetJoystickCommand;
-ros::Subscriber subGetStateEstim;
+ros::Subscriber subControllerLoop;
 
 // Messages
-mpc::msgMPC_Input mpcInputMsg;
-mpc::msgMPC_Data mpcDataMsg;
+mpc::msgMpc_input mpcInputMsg;
+mpc::msgMpc_data mpcDataMsg;
 
 //MPC Controller
-CGdnCont gdnController;
+mpcController mpcFormationController;
 
 void getControlModeCallback(const sensor_msgs::Joy& joystickMessage)
 {
 	// Switch control mode between manual and MPC
 	if (joystickMessage.buttons[3] == 1)       controlFlag = 0;
 	else if (joystickMessage.buttons[3] == 0)  controlFlag = 1;
+	ROS_INFO(" MPC: %d", controlFlag);
 }
 
 void getRefCallback(const generate_reference::msgReference &referenceDataMessage)
 {	
 	// Reset flag
-	refPosFlag = 0;
+	newRefFlag = 0;
 	if (referenceDataMessage.signal == 1)
 	{
 		//Test Zref
@@ -59,9 +61,10 @@ void getRefCallback(const generate_reference::msgReference &referenceDataMessage
 			yRef = (double)(referenceDataMessage.next_ref_y);
 			zRef = (double)(referenceDataMessage.next_ref_z);
 			// Set flag
-			refPosFlag = 1;
+			newRefFlag = 1;
 		}
 	}
+	ROS_INFO(" ref: %f, %f %f", xRef, yRef, zRef);
 }
 
 void getJoystickCommandCallback(const hector_quadrotor_teleop::adv_cmd_vel& msg_cmd_vel)
@@ -76,17 +79,17 @@ void getJoystickCommandCallback(const hector_quadrotor_teleop::adv_cmd_vel& msg_
 	stateData.yawRateFromJoystick = msg_cmd_vel.angular.z;
 }
 
-void getStateEstimCallback(const estimate::msgCrazyflie_data& esti_msg)
+void controllerLoopCallback(const estimate::msgCrazyflie_data& esti_msg)
 {
 	Eigen::Matrix<double,N_INPUT_MODEL*N,1> Us;
 
 	Us = Eigen::Matrix<double,N_INPUT_MODEL*N,1>::Zero();
 
 	// Update state from estimation
-	stateData.x       = (double)(esti_msg.vrpn_orix_msg);
-	stateData.y       = (double)(esti_msg.vrpn_oriy_msg);
-	stateData.z       = (double)(esti_msg.vrpn_oriz_msg);
-	stateData.w       = (double)(esti_msg.vrpn_oriw_msg);
+	stateData.qx       = (double)(esti_msg.vrpn_orix_msg);
+	stateData.qy       = (double)(esti_msg.vrpn_oriy_msg);
+	stateData.qz       = (double)(esti_msg.vrpn_oriz_msg);
+	stateData.qw       = (double)(esti_msg.vrpn_oriw_msg);
 	stateData.xPos    = (double)(esti_msg.vrpn_posx_msg);
 	stateData.yPos    = (double)(esti_msg.vrpn_posy_msg);
 	stateData.zPos    = (double)(esti_msg.vrpn_posz_msg);
@@ -100,20 +103,25 @@ void getStateEstimCallback(const estimate::msgCrazyflie_data& esti_msg)
 	{
 		startTime = ros::Time::now();
 		// MPC Controller iteration
-		Us = gdnController.GdnCont(stateData,refPosFlag,xRef,yRef,zRef);
+		Us = mpcFormationController.mpcControllerLoop(stateData,newRefFlag,xRef,yRef,zRef);
 		endTime = ros::Time::now();
+		dtCont = endTime-startTime;
+		ROS_INFO("Duration: %d.%d", dtCont.sec, dtCont.nsec);
 
 		// Apply first input
 		rollDesired    = Us(0,0);
 		pitchDesired  = Us(1,0);
 		yawRateDesired    = Us(2,0);
 		thrustDesired = Us(3,0);
+		ROS_INFO(" MPC");
+		ROS_INFO(" %f %f %f %f", rollDesired, pitchDesired, yawRateDesired, thrustDesired);
+
 
 	}
 	else //Manual mode ON
 	{
 		// Reset MPC Controller
-	  	gdnController.ResetCont(stateData);
+	  	mpcFormationController.ResetCont(stateData);
 
 	  	// No reference to track
 		xRef = stateData.xPos;
@@ -130,6 +138,7 @@ void getStateEstimCallback(const estimate::msgCrazyflie_data& esti_msg)
 		offset_phi = stateData.rollFromJoystick;
 		offset_the = stateData.pitchFromJoystick;
 		offset_thr = stateData.pitchFromJoystick;
+		ROS_INFO("Joystick");
 
 	}
 
@@ -174,9 +183,9 @@ int main(int argc, char **argv)
 	subGetControlMode = nh.subscribe("joy",1, getControlModeCallback);
 	subGetRef = nh.subscribe("pos_msg",1, getRefCallback);
 	subGetJoystickCommand = nh.subscribe("/crazyflie/cmd_vel",1, getJoystickCommandCallback);
-	subGetStateEstim = nh.subscribe("crazyflie_data_msg",1, getStateEstimCallback);
-	pubMpcInput = nh.advertise<mpc::msgMPC_Input>("mpcInputMsg",100);
-	pubMpcData = nh.advertise<mpc::msgMPC_Data>("mpcDataMsg",100);
+	subControllerLoop = nh.subscribe("crazyflie_data_msg",1, controllerLoopCallback);
+	pubMpcInput = nh.advertise<mpc::msgMpc_input>("mpcInputMsg",100);
+	pubMpcData = nh.advertise<mpc::msgMpc_data>("mpcDataMsg",100);
 
 	ros::spin();
 

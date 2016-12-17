@@ -33,6 +33,7 @@ struct Supply_
     : header(_alloc)
     , voltage(_alloc)
     , current(_alloc)  {
+  (void)_alloc;
     }
 
 
@@ -80,7 +81,7 @@ namespace message_traits
 
 
 // BOOLTRAITS {'IsFixedSize': False, 'IsMessage': True, 'HasHeader': True}
-// {'std_msgs': ['/opt/ros/indigo/share/std_msgs/cmake/../msg'], 'hector_uav_msgs': ['/home/formation/catkin_ws/src/hector_quadrotor/hector_uav_msgs/msg']}
+// {'std_msgs': ['/opt/ros/kinetic/share/std_msgs/cmake/../msg'], 'actionlib_msgs': ['/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg'], 'hector_uav_msgs': ['/home/loic_dubois/Documents/pdm_crazyflie/catkin/src/hector_quadrotor/hector_uav_msgs/msg', '/home/loic_dubois/Documents/pdm_crazyflie/catkin/devel/share/hector_uav_msgs/msg'], 'geometry_msgs': ['/opt/ros/kinetic/share/geometry_msgs/cmake/../msg']}
 
 // !!!!!!!!!!! ['__class__', '__delattr__', '__dict__', '__doc__', '__eq__', '__format__', '__getattribute__', '__hash__', '__init__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_parsed_fields', 'constants', 'fields', 'full_name', 'has_header', 'header_present', 'names', 'package', 'parsed_fields', 'short_name', 'text', 'types']
 

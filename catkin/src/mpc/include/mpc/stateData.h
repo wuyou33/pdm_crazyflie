@@ -1,5 +1,5 @@
-#ifndef STATE_MODEL_STRUCT_H
-#define STATE_MODEL_STRUCT_H
+#ifndef STATE_DATA_H
+#define STATE_DATA_H
 
 /*
 typedef struct {
@@ -17,8 +17,8 @@ typedef struct {
   double xPos,yPos,zPos;
   double xVel,yVel,zVel;
   double yaw;
-  double x,y,z,w;
+  double qx,qy,qz,qw;
   double rollFromJoystick,pitchFromJoystick,yawRateFromJoystick,thrustFromJoystick;
-} MPCData;
+} StateData;
 
 #endif

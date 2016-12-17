@@ -1,0 +1,38 @@
+MPC off
+rostopic pub /joy sensor_msgs/Joy '[0, now, base_link]' '[0.0, 0.0, 0.0, 0.0]' '[0, 0, 0, 1]'
+MPC on
+rostopic pub /joy sensor_msgs/Joy '[0, now, base_link]' '[0.0, 0.0, 0.0, 0.0]' '[0, 0, 0, 0]'
+
+set ref:
+rostopic pub /pos_msg generate_reference/msgReference '1' '0.0' '0.0' '0.00001'
+
+run controller:
+rostopic pub /crazyflie_data_msg estimate/msgCrazyflie_data '0.0' '0.0' '0.0' '0.0' '0.0' '0.0' '0.0' '0.0' '1.0' '1.0' '1.0' '0.01' '0.01' '0.01' '0.0' '0.0' '0.0' '0.0' '0.0' '0.0' '0.0' '0.0' '0.0' '0.0' 
+
+ rosmsg show estimate/msgCrazyflie_data 
+float64 imu_time_msg
+float64 imu_angx_msg
+float64 imu_angy_msg
+float64 imu_angz_msg
+float64 imu_linx_msg
+float64 imu_liny_msg
+float64 imu_linz_msg
+float64 vrpn_time_msg
+float64 vrpn_posx_msg
+float64 vrpn_posy_msg
+float64 vrpn_posz_msg
+float64 vrpn_velx_msg
+float64 vrpn_vely_msg
+float64 vrpn_velz_msg
+float64 vrpn_linx_msg
+float64 vrpn_liny_msg
+float64 vrpn_linz_msg
+float64 vrpn_orix_msg
+float64 vrpn_oriy_msg
+float64 vrpn_oriz_msg
+float64 vrpn_oriw_msg
+float64 vrpn_roll_msg
+float64 vrpn_pitch_msg
+float64 vrpn_yaw_msg
+
+

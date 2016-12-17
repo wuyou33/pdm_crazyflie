@@ -1,10 +1,10 @@
 
 "use strict";
 
-let msgMPC_Data = require('./msgMPC_Data.js');
-let msgMPC_Input = require('./msgMPC_Input.js');
+let msgMpc_input = require('./msgMpc_input.js');
+let msgMpc_data = require('./msgMpc_data.js');
 
 module.exports = {
-  msgMPC_Data: msgMPC_Data,
-  msgMPC_Input: msgMPC_Input,
+  msgMpc_input: msgMpc_input,
+  msgMpc_data: msgMpc_data,
 };

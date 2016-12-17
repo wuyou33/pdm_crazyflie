@@ -48,8 +48,8 @@ find_package(Eigen REQUIRED)
 
 ## Generate messages in the 'msg' folder
  add_message_files(
-   FILES msgMPC_Input.msg
-         msgMPC_Data.msg
+   FILES msgMpc_input.msg
+         msgMpc_data.msg
 #   Message1.msg
 #   Message2.msg
  )
@@ -195,6 +195,6 @@ include_directories(
 add_executable(eeigen src/eeigen.cpp)
 target_link_libraries(eeigen ${catkin_LIBRARIES})
 
-add_executable(MPC_main src/MPC_main.cpp src/GdnCont.cpp)
-target_link_libraries(MPC_main ${catkin_LIBRARIES})
-add_dependencies(MPC_main mpc_generate_messages_cpp)
+add_executable(formation_control src/formationControl.cpp src/mpc.cpp)
+target_link_libraries(formation_control ${catkin_LIBRARIES})
+add_dependencies(formation_control mpc_generate_messages_cpp)
