@@ -1,22 +1,22 @@
 ;; Auto-generated. Do not edit!
 
 
-(when (boundp 'mpc::msgMPC_Data)
+(when (boundp 'mpc::msgMpc_data)
   (if (not (find-package "MPC"))
     (make-package "MPC"))
-  (shadow 'msgMPC_Data (find-package "MPC")))
+  (shadow 'msgMpc_data (find-package "MPC")))
 (unless (find-package "MPC::MSGMPC_DATA")
   (make-package "MPC::MSGMPC_DATA"))
 
 (in-package "ROS")
-;;//! \htmlinclude msgMPC_Data.msg.html
+;;//! \htmlinclude msgMpc_data.msg.html
 
 
-(defclass mpc::msgMPC_Data
+(defclass mpc::msgMpc_data
   :super ros::object
   :slots (_xPos _yPos _zPos _controlFlag _xPosRef _yPosRef _zPosRef ))
 
-(defmethod mpc::msgMPC_Data
+(defmethod mpc::msgMpc_data
   (:init
    (&key
     ((:xPos __xPos) 0.0)
@@ -116,9 +116,9 @@
    self)
   )
 
-(setf (get mpc::msgMPC_Data :md5sum-) "6bc2414c1027b318ae658fa2e1750a8e")
-(setf (get mpc::msgMPC_Data :datatype-) "mpc/msgMPC_Data")
-(setf (get mpc::msgMPC_Data :definition-)
+(setf (get mpc::msgMpc_data :md5sum-) "6bc2414c1027b318ae658fa2e1750a8e")
+(setf (get mpc::msgMpc_data :datatype-) "mpc/msgMpc_data")
+(setf (get mpc::msgMpc_data :definition-)
       "float64 xPos
 float64 yPos
 float64 zPos
@@ -133,6 +133,6 @@ float64 zPosRef
 
 
 
-(provide :mpc/msgMPC_Data "6bc2414c1027b318ae658fa2e1750a8e")
+(provide :mpc/msgMpc_data "6bc2414c1027b318ae658fa2e1750a8e")
 
 

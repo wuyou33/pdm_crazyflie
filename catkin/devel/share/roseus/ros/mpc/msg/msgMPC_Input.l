@@ -1,22 +1,22 @@
 ;; Auto-generated. Do not edit!
 
 
-(when (boundp 'mpc::msgMPC_Input)
+(when (boundp 'mpc::msgMpc_input)
   (if (not (find-package "MPC"))
     (make-package "MPC"))
-  (shadow 'msgMPC_Input (find-package "MPC")))
+  (shadow 'msgMpc_input (find-package "MPC")))
 (unless (find-package "MPC::MSGMPC_INPUT")
   (make-package "MPC::MSGMPC_INPUT"))
 
 (in-package "ROS")
-;;//! \htmlinclude msgMPC_Input.msg.html
+;;//! \htmlinclude msgMpc_input.msg.html
 
 
-(defclass mpc::msgMPC_Input
+(defclass mpc::msgMpc_input
   :super ros::object
   :slots (_rollPhi _thetaPitch _psiYawRate _thrust _controlFlag ))
 
-(defmethod mpc::msgMPC_Input
+(defmethod mpc::msgMpc_input
   (:init
    (&key
     ((:rollPhi __rollPhi) 0.0)
@@ -94,9 +94,9 @@
    self)
   )
 
-(setf (get mpc::msgMPC_Input :md5sum-) "64731ea8c92ca2a1540116905352cf9e")
-(setf (get mpc::msgMPC_Input :datatype-) "mpc/msgMPC_Input")
-(setf (get mpc::msgMPC_Input :definition-)
+(setf (get mpc::msgMpc_input :md5sum-) "64731ea8c92ca2a1540116905352cf9e")
+(setf (get mpc::msgMpc_input :datatype-) "mpc/msgMpc_input")
+(setf (get mpc::msgMpc_input :definition-)
       "float64 rollPhi
 float64 thetaPitch
 float64 psiYawRate
@@ -108,6 +108,6 @@ int8 controlFlag
 
 
 
-(provide :mpc/msgMPC_Input "64731ea8c92ca2a1540116905352cf9e")
+(provide :mpc/msgMpc_input "64731ea8c92ca2a1540116905352cf9e")
 
 

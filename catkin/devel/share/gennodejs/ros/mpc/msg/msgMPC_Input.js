@@ -11,7 +11,7 @@ let _finder = require('../find.js');
 
 //-----------------------------------------------------------
 
-class msgMPC_Input {
+class msgMpc_input {
   constructor() {
     this.rollPhi = 0.0;
     this.thetaPitch = 0.0;
@@ -21,7 +21,7 @@ class msgMPC_Input {
   }
 
   static serialize(obj, bufferInfo) {
-    // Serializes a message object of type msgMPC_Input
+    // Serializes a message object of type msgMpc_input
     // Serialize message field [rollPhi]
     bufferInfo = _serializer.float64(obj.rollPhi, bufferInfo);
     // Serialize message field [thetaPitch]
@@ -36,10 +36,10 @@ class msgMPC_Input {
   }
 
   static deserialize(buffer) {
-    //deserializes a message object of type msgMPC_Input
+    //deserializes a message object of type msgMpc_input
     let tmp;
     let len;
-    let data = new msgMPC_Input();
+    let data = new msgMpc_input();
     // Deserialize message field [rollPhi]
     tmp = _deserializer.float64(buffer);
     data.rollPhi = tmp.data;
@@ -68,7 +68,7 @@ class msgMPC_Input {
 
   static datatype() {
     // Returns string type for a message object
-    return 'mpc/msgMPC_Input';
+    return 'mpc/msgMpc_input';
   }
 
   static md5sum() {
@@ -91,4 +91,4 @@ class msgMPC_Input {
 
 };
 
-module.exports = msgMPC_Input;
+module.exports = msgMpc_input;
