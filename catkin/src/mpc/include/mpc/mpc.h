@@ -22,10 +22,11 @@ protected:
 	double dt,xRef,yRef,zRef,rx,ru,alphaMax,Rr;
 	Eigen::Matrix<double,N_INPUT_MODEL*N,1> U;
 	Eigen::Matrix<double,N_INPUT_MODEL*N,1> dU;
-	Eigen::Matrix<double,N_STATE_MODEL,1> UOb;
 	Eigen::Matrix<double,N_STATE_MODEL,1> x;
-	Eigen::Matrix<double,N_STATE_MODEL,1> xOb;
+	Eigen::Matrix<double,N_STATE_MODEL,1> xOld;
 	Eigen::Matrix<double,N_STATE_MODEL,1> dx;
+	Eigen::Matrix<double,N_STATE_OB,1> xOb;
+	Eigen::Matrix<double,N_INPUT_OB,1> UOb;
 
 	Eigen::MatrixXd FDGMRES(Eigen::Matrix<double,N_INPUT_MODEL*N,1> U,Eigen::Matrix<double,N_STATE_MODEL,1> x,Eigen::Matrix<double,N_STATE_MODEL,1> dx);
 	Eigen::MatrixXd CalcF(Eigen::Matrix<double,N_INPUT_MODEL*N,1> U,Eigen::Matrix<double,N_STATE_MODEL,1> x);

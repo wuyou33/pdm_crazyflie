@@ -86,10 +86,10 @@ void controllerLoopCallback(const estimate::msgCrazyflie_data& esti_msg)
 	Us = Eigen::Matrix<double,N_INPUT_MODEL*N,1>::Zero();
 
 	// Update state from estimation
-	stateData.qx       = (double)(esti_msg.vrpn_orix_msg);
-	stateData.qy       = (double)(esti_msg.vrpn_oriy_msg);
-	stateData.qz       = (double)(esti_msg.vrpn_oriz_msg);
-	stateData.qw       = (double)(esti_msg.vrpn_oriw_msg);
+//	stateData.qx       = (double)(esti_msg.vrpn_orix_msg);
+//	stateData.qy       = (double)(esti_msg.vrpn_oriy_msg);
+//	stateData.qz       = (double)(esti_msg.vrpn_oriz_msg);
+//	stateData.qw       = (double)(esti_msg.vrpn_oriw_msg);
 	stateData.xPos    = (double)(esti_msg.vrpn_posx_msg);
 	stateData.yPos    = (double)(esti_msg.vrpn_posy_msg);
 	stateData.zPos    = (double)(esti_msg.vrpn_posz_msg);
@@ -109,12 +109,17 @@ void controllerLoopCallback(const estimate::msgCrazyflie_data& esti_msg)
 		ROS_INFO("Duration: %d.%d", dtCont.sec, dtCont.nsec);
 
 		// Apply first input
-		rollDesired    = Us(0,0);
-		pitchDesired  = Us(1,0);
-		yawRateDesired    = Us(2,0);
-		thrustDesired = Us(3,0);
+
+		float fxDesired = Us(0,0);
+		float fyDesired = Us(1,0);
+		float fzDesired = Us(3,0);
+		float normF = sqrt(pow(fxDesired, 2.0) + pow(fyDesired, 2.0) + MASS_GRAVITY_SQUARED);
+
+		rollDesired			= fyDesired/normF*RAD_TO_DEG;
+		pitchDesired  		= -fxDesired/normF*RAD_TO_DEG;
+		yawRateDesired    	= Us(2,0)*RAD_TO_DEG;
+		thrustDesired		= MASS_GRAVITY + Us(3,0); //Verify sign!!
 		ROS_INFO(" MPC");
-		ROS_INFO(" %f %f %f %f", rollDesired, pitchDesired, yawRateDesired, thrustDesired);
 
 
 	}

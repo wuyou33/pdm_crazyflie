@@ -1,4 +1,5 @@
-#include <ros/ros.h> //Debug
+#include <ros/ros.h> // Debug
+#include <iostream> // Debub
 #include <Eigen/Core>
 #include"mpc.h"
 
@@ -25,10 +26,11 @@ mpcController::mpcController(void)
 {
 	U       = Eigen::Matrix<double,N_INPUT_MODEL*N,1>::Zero();
 	dU      = Eigen::Matrix<double,N_INPUT_MODEL*N,1>::Zero();
-	UOb    = Eigen::Matrix<double,N_STATE_MODEL,1>::Zero();
 	x       = Eigen::Matrix<double,N_STATE_MODEL,1>::Zero();
+	xOld    = Eigen::Matrix<double,N_STATE_MODEL,1>::Zero();
 	dx      = Eigen::Matrix<double,N_STATE_MODEL,1>::Zero();
-	xOb    = Eigen::Matrix<double,N_STATE_MODEL,1>::Zero();
+	xOb     = Eigen::Matrix<double,N_STATE_OB,1>::Zero();
+	UOb     = Eigen::Matrix<double,N_INPUT_OB,1>::Zero();
 	S       = Eigen::Matrix<double,N_STATE_MODEL,N_STATE_MODEL>::Zero();
 	Q       = Eigen::Matrix<double,N_STATE_MODEL,N_STATE_MODEL>::Zero();
 	R       = Eigen::Matrix<double,N_INPUT_MODEL,N_INPUT_MODEL>::Zero();
@@ -40,26 +42,26 @@ mpcController::mpcController(void)
 	//MPC parameters
 	///////////////////////////////////////////////////////////////////
 	//S
-	S(0,0) = 500.0; //x
-	S(1,1) = 500.0; //y
-	S(2,2) = 1.0;//z
-	S(3,3) = 100.0;//vx
-	S(4,4) = 100.0;//vy
-	S(5,5) = 1.0; //vz
-	S(6,6) = 1.0;//yaw
+	S(0,0) = 8.0; //x
+	S(1,1) = 8.0; //y
+	S(2,2) = 8.0;//z
+	S(3,3) = 3.0;//vx
+	S(4,4) = 3.0;//vy
+	S(5,5) = 3.0; //vz
+	S(6,6) = 30.0;//yaw [rad]
 	//Q
-	Q(0,0) = 150.0; //x
-	Q(1,1) = 150.0; //y
-	Q(2,2) = 1.0;  //z
-	Q(3,3) = 100.0;  //vx
-	Q(4,4) = 100.0;  //vy
+	Q(0,0) = 8.0; //x
+	Q(1,1) = 8.0; //y
+	Q(2,2) = 8.0;  //z
+	Q(3,3) = 1.0;  //vx
+	Q(4,4) = 1.0;  //vy
 	Q(5,5) = 1.0;  //vz
-	Q(6,6) = 1.0;  //yaw
+	Q(6,6) = 15.0;  //yaw [rad]
 	//R
-	R(0,0) = 1.0; //fx
-	R(1,1) = 1.0; //fy
-	R(2,2) = 1.0; //fz
-	R(3,3) = 1.0; //yawRate
+	R(0,0) = 5000.0; //fx
+	R(1,1) = 5000.0; //fy
+	R(2,2) = 5.0; //yawRate [rad/s]
+	R(3,3) = 5000.0; //fz
 
 	//Drone model
 	///////////////////////////////////////////////////////////////////
@@ -87,12 +89,12 @@ mpcController::mpcController(void)
 		for(int j=0;j<N_INPUT_OB;j++)
 			B_ob(i,j) = Bobs[i][j];
 
-	dt = 0.01;	//sampling time
+	dt = 0.01;	//sampling time [s]
 
-	rx = 3000.0;	// collision avoidance penalty weight 3000
-	ru = 5.0;	// input constraint penalty weight 10000
-	Rr = 0.5;	//radius of collision
-	alphaMax = 30.0;	// max angle with horizontal plane
+	rx = 8000.0;	// collision avoidance penalty weight 3000
+	ru = 600000.0;	// input constraint penalty weight 10000
+	Rr = 0.4;	//radius of collision [m]
+	alphaMax = 0.1745; 	// max angle with horizontal plane [rad] 10 [deg] = 0.1745 [rad]
 	///////////////////////////////////////////////////////////////////
 }
 
@@ -105,9 +107,10 @@ void mpcController::ResetCont(StateData stateData)
 	U     = Eigen::Matrix<double,N_INPUT_MODEL*N,1>::Zero();
 	dU    = Eigen::Matrix<double,N_INPUT_MODEL*N,1>::Zero();
 	x     = Eigen::Matrix<double,N_STATE_MODEL,1>::Zero();
+	xOld  = Eigen::Matrix<double,N_STATE_MODEL,1>::Zero();
 	dx    = Eigen::Matrix<double,N_STATE_MODEL,1>::Zero();
-	xOb  = Eigen::Matrix<double,N_STATE_MODEL,1>::Zero();
-	UOb  = Eigen::Matrix<double,N_STATE_MODEL,1>::Zero();
+	xOb  = Eigen::Matrix<double,N_STATE_OB,1>::Zero();
+	UOb  = Eigen::Matrix<double,N_INPUT_OB,1>::Zero();
 
 	// No reference to track
 	xRef = stateData.xPos;
@@ -141,43 +144,47 @@ Eigen::MatrixXd mpcController::mpcControllerLoop(StateData stateData,int newRefF
 		zRef = zRefNext;
 	}
 
-	// State, shifted to reference
-	x << 	xOb(0,0) - xRef,		//x = [x,y,z,vx,vy,vz,ax,ay,az]'
-		xOb(1,0) - yRef,
-		xOb(2,0) - zRef,
-		xOb(3,0),
-		xOb(4,0),
-		xOb(5,0),
-		xOb(6,0),
-		xOb(7,0),
-		xOb(8,0);
+	// old state, shifted with respect to reference
+	xOld << 	xOb(0,0) - xRef,		//x = [x,y,z,vx,vy,vz,yaw]'
+				xOb(1,0) - yRef,
+				xOb(2,0) - zRef,
+				xOb(3,0),
+				xOb(4,0),
+				xOb(5,0),
+				stateData.yaw; // MUST BE IN RADIAN
 
-	// Observer update (20160907)
-	UOb << stateData.xPos,			//UOb = [x,y,z,vx,vy,vz,φ,θ,T]'
+	UOb << stateData.xPos,			//UOb = measurements and commands [x,y,z,vx,vy,vz,φ,θ,T]'
 		stateData.yPos,
 		-1.0 * stateData.zPos,
 		stateData.xVel,
 		stateData.yVel,
 		-1.0 * stateData.zVel,
-		U(0,0),
-		U(1,0),
+		-1.0*U(0,0)/(U(3,0)+MASS_GRAVITY),			//Fy to roll: roll ~ tan(roll) = -cos(pitch)*Fy/Fz
+		U(1,0)/(U(3,0)+MASS_GRAVITY),				//Fx to pitch: pitch ~ tan(pitch) = Fx/Fz
 		U(3,0);
-
+	// State update
 	xOb  = A_ob * xOb + B_ob * UOb;
 
+	// Current state, shifted with respect to reference
+	x << 	xOb(0,0) - xRef,		//x = [x,y,z,vx,vy,vz,yaw]'
+			xOb(1,0) - yRef,
+			xOb(2,0) - zRef,
+			xOb(3,0),
+			xOb(4,0),
+			xOb(5,0),
+			stateData.yaw; // MUST BE IN RADIAN
+
 	//differentiate state
-	dx = x * (-1.0);
-	dx += x;
-	dx  = dx / dt;
+	dx  = (x-xOld) / dt;
+
 
 	// if C/GMRES not initialized, initialize it.
 	if(initFlag == 0){
 		initFlag = 1;
 		dx = Eigen::Matrix<double,N_STATE_MODEL,1>::Zero();
 		U  = Eigen::Matrix<double,N_INPUT_MODEL*N,1>::Zero();
-		ROS_INFO("Init");
 	}
-	
+
 	// FDGMRES
 	dU = FDGMRES(U,x,dx);
 	U += dU * dt;
@@ -191,68 +198,87 @@ Eigen::MatrixXd mpcController::FDGMRES(Eigen::Matrix<double,N_INPUT_MODEL*N,1> U
 {
 	//FDGMRESパラメータ
 	/////////////////////////////////////////////
-	double	h = 0.1;	// FDGMRES step size
+	double	h = 0.1;		// FDGMRES step size
 	double	zeta = 10.0;	// stabilizing matrix parameter
 	/////////////////////////////////////////////
 
 	int i,j;
 	int k = 0;
 	double rho = 0.0;
-	double distanceRobotsSquared;
+	double normVector;
 	double w1,w2;
 
 	// Initialization
-	Eigen::Matrix<double,N_INPUT_MODEL*N,1> buf;		buf = Eigen::Matrix<double,N_INPUT_MODEL*N,1>::Zero();
-	Eigen::Matrix<double,N_INPUT_MODEL*N,1> buf2;		buf2 = Eigen::Matrix<double,N_INPUT_MODEL*N,1>::Zero();
+	Eigen::Matrix<double,N_INPUT_MODEL*N,1> F_Ux;		F_Ux = Eigen::Matrix<double,N_INPUT_MODEL*N,1>::Zero();
+	Eigen::Matrix<double,N_INPUT_MODEL*N,1> F_Uxdx;		F_Uxdx = Eigen::Matrix<double,N_INPUT_MODEL*N,1>::Zero();
+//	Eigen::Matrix<double,N_INPUT_MODEL*N,1> F_UdUxdx;	F_UdUxdx = Eigen::Matrix<double,N_INPUT_MODEL*N,1>::Zero();
+	Eigen::Matrix<double,N_INPUT_MODEL*N,1> b;			b = Eigen::Matrix<double,N_INPUT_MODEL*N,1>::Zero();
 	Eigen::Matrix<double,N_INPUT_MODEL*N,1> r;			r = Eigen::Matrix<double,N_INPUT_MODEL*N,1>::Zero();
-	Eigen::MatrixXd v(N_INPUT_MODEL*N,kmax);		        v = Eigen::Matrix<double,N_INPUT_MODEL*N,1>::Zero();
-	Eigen::Matrix<double,kmax+1,kmax+1> hh;			hh = Eigen::Matrix<double,kmax+1,kmax+1>::Zero();
-	Eigen::Matrix<double,kmax+1,1> c;			c = Eigen::Matrix<double,kmax+1,1>::Zero();
-	Eigen::Matrix<double,kmax+1,1> s;			s = Eigen::Matrix<double,kmax+1,1>::Zero();
-	Eigen::Matrix<double,kmax+1,1> g;			g = Eigen::Matrix<double,kmax+1,1>::Zero();
+	Eigen::MatrixXd v(N_INPUT_MODEL*N,kmax);		    v = Eigen::Matrix<double,N_INPUT_MODEL*N,1>::Zero();
+	Eigen::Matrix<double,kmax+1,kmax+1> hh;				hh = Eigen::Matrix<double,kmax+1,kmax+1>::Zero();
+	Eigen::Matrix<double,kmax+1,1> c;					c = Eigen::Matrix<double,kmax+1,1>::Zero();
+	Eigen::Matrix<double,kmax+1,1> s;					s = Eigen::Matrix<double,kmax+1,1>::Zero();
+	Eigen::Matrix<double,kmax+1,1> g;					g = Eigen::Matrix<double,kmax+1,1>::Zero();
 
-	buf  = CalcF(U, x);
-	buf2 = CalcF(U, x + dx * h);
+	F_Ux  = CalcF(U, x);
+	F_Uxdx = CalcF(U, x + dx * h);
+	// Not implemented yet
+//	F_UdUxdx = CalcF(U +dUHat, x + dx * h);
 
-	r = buf*(-1.0)*zeta - (buf2 - buf)/h;
+//	b = F_Ux*(-1.0)*zeta - (F_Uxdx - F_Ux)/h;
+//	r = b - (F_UdUxdx - F_Uxdx)/h;
+	// r = b only if dUHat = 0
+	r = F_Ux*(-1.0)*zeta - (F_Uxdx - F_Ux)/h;
+
+	// residual norm
 	rho = 0.0;
 	for(i = 0; i < N_INPUT_MODEL*N; i++)
 		rho += pow(r(i,0),2.0);
 
 	rho    = sqrt(rho);
-	g(0,0) = rho;	v = r/rho;
+	g(0,0) = rho;
+	v = r;
+	if (rho > 0)
+		// normalization
+		v = v/rho;
 
 	// FDGMRES iteration
-	while(k<kmax){
-		//(a)
+	while ((k<kmax) && (rho > 0))
+	{
+		//(a) Counter increase
 		k += 1;
-		//(b)
-                Eigen::MatrixXd vtemp(N_INPUT_MODEL*N,1);
+		//(b) Forward approximation of dF in direction of v_k
+		Eigen::MatrixXd vTmp(N_INPUT_MODEL*N,1);
 
-                vtemp = v;
-                v.resize(N_INPUT_MODEL*N,2);
-                v << vtemp, (CalcF(U+vtemp*h,x+dx*h) - CalcF(U, x+dx*h))/h;
+		vTmp = v;
+		// Add a line. Beware, resize function, destruct previous content.
+		v.resize(N_INPUT_MODEL*N,k+1);
+		// Update v
+		v << vTmp, (CalcF(U+vTmp*h,x+dx*h) - CalcF(U, x+dx*h))/h;
 
+        // Orthogonal basis: Gramm-Schmidt process
 		for(j = 0; j < k; j++){
-			hh.block(j,k-1,1,1) = (v.block(0,0,N_INPUT_MODEL*N,1)).transpose()*v.block(0,k,N_INPUT_MODEL*N,1);	//160721
-			vtemp.resize(N_INPUT_MODEL*N,2);
-	                vtemp = v;
-			v << vtemp.block(0,0,N_INPUT_MODEL*N,1),vtemp.block(0,k,N_INPUT_MODEL*N,1) - vtemp.block(0,j,N_INPUT_MODEL*N,1)*hh(j,k-1);
+			hh.block(j,k-1,1,1) = (v.block(0,0,N_INPUT_MODEL*N,1)).transpose()*v.block(0,k,N_INPUT_MODEL*N,1);
+			vTmp.resize(N_INPUT_MODEL*N,2);
+	                vTmp = v;
+			v << vTmp.block(0,0,N_INPUT_MODEL*N,1),vTmp.block(0,k,N_INPUT_MODEL*N,1) - vTmp.block(0,j,N_INPUT_MODEL*N,1)*hh(j,k-1);
 		}
 
 		//(c)
-		distanceRobotsSquared = 0.0;
-		for(i = 0; i < N_INPUT_MODEL*N; i++) distanceRobotsSquared += pow(v(i,k),2.0);
-		distanceRobotsSquared      = sqrt(distanceRobotsSquared);
-		hh(k,k-1) = distanceRobotsSquared;
+		normVector = 0.0;
+		for(i = 0; i < N_INPUT_MODEL*N; i++)
+			normVector += pow(v(i,k),2.0);
+		normVector      = sqrt(normVector);
+		hh(k,k-1) = normVector;
 
 		//(d)
-		if(hh(k,k-1) != 0.0) {
-		  vtemp = v;
-	          v.block(0,k,N_INPUT_MODEL*N,1) = vtemp.block(0,k,N_INPUT_MODEL*N,1)/hh(k,k-1);
+		if(hh(k,k-1) != 0.0)
+		{
+			vTmp = v;
+	        v.block(0,k,N_INPUT_MODEL*N,1) = vTmp.block(0,k,N_INPUT_MODEL*N,1)/hh(k,k-1);
 		}
 
-		//(e)
+		//(e) Given rotations to solve problem
 		if(k>1){
 			for(i = 0; i < k-1; i++){
 				w1 = c(i,0)*hh(i,k-1) - s(i,0)*hh(i+1,k-1);
@@ -261,13 +287,14 @@ Eigen::MatrixXd mpcController::FDGMRES(Eigen::Matrix<double,N_INPUT_MODEL*N,1> U
 				hh(i+1,k-1) = w2;
 			}
 		}
-		distanceRobotsSquared = 0.0;
-		for(i = k-1; i <=k; i++) distanceRobotsSquared += pow(hh(i,k-1),2.0);
-		distanceRobotsSquared = sqrt(distanceRobotsSquared);
+		normVector = 0.0;
+		for(i = k-1; i <=k; i++)
+			normVector += pow(hh(i,k-1),2.0);
+		normVector = sqrt(normVector);
 
-		if(distanceRobotsSquared != 0.0){
-			c(k-1,0) = hh(k-1,k-1)/distanceRobotsSquared;
-			s(k-1,0) = -1.0*hh(k,k-1)/distanceRobotsSquared;
+		if(normVector != 0.0){
+			c(k-1,0) = hh(k-1,k-1)/normVector;
+			s(k-1,0) = -1.0*hh(k,k-1)/normVector;
 
 			hh(k-1,k-1) = c(k-1,0)*hh(k-1,k-1)-s(k-1,0)*hh(k,k-1);
 			hh(k,k-1)   = 0.0;
@@ -279,9 +306,9 @@ Eigen::MatrixXd mpcController::FDGMRES(Eigen::Matrix<double,N_INPUT_MODEL*N,1> U
 			g(k,0)   = w2;
 		}
 
-		//(f)
-		//rho = g(k,0);
-		//if(rho < 0) rho = -1.0 * rho;
+		//(f) Update residual norm
+		rho = g(k,0);
+		if(rho < 0) rho = -1.0 * rho;
 	}
 
 //	dU = v.block(0,0,N_INPUT_MODEL*N,k)*(hh.block(0,0,k,k)).inverse()*g.block(0,0,k,1);
@@ -299,13 +326,13 @@ Eigen::MatrixXd mpcController::CalcF(Eigen::Matrix<double,N_INPUT_MODEL*N,1> U, 
 	int i,j;
 	double distanceRobotsSquared;
 
-	Eigen::Matrix<double,N_STATE_MODEL,N+1> xStar;		xStar = Eigen::Matrix<double,N_STATE_MODEL,N+1>::Zero();
-	Eigen::Matrix<double,N_INPUT_MODEL*N,1> uStar;		uStar = Eigen::Matrix<double,N_INPUT_MODEL*N,1>::Zero();
+	Eigen::Matrix<double,N_STATE_MODEL,N+1> xStar;			xStar = Eigen::Matrix<double,N_STATE_MODEL,N+1>::Zero();
+	Eigen::Matrix<double,N_INPUT_MODEL*N,1> uStar;			uStar = Eigen::Matrix<double,N_INPUT_MODEL*N,1>::Zero();
 	Eigen::Matrix<double,N_STATE_MODEL,N+1> lambdaStar;		lambdaStar = Eigen::Matrix<double,N_STATE_MODEL,N+1>::Zero();
-	Eigen::Matrix<double,N_STATE_MODEL,1> f;			f = Eigen::Matrix<double,N_STATE_MODEL,1>::Zero();
-	Eigen::Matrix<double,N_STATE_MODEL,N_STATE_MODEL> dfdx;		dfdx = Eigen::Matrix<double,N_STATE_MODEL,N_STATE_MODEL>::Zero();
-	Eigen::Matrix<double,N_STATE_MODEL,N_INPUT_MODEL> dfdu;		dfdu = Eigen::Matrix<double,N_STATE_MODEL,N_INPUT_MODEL>::Zero();
-	Eigen::Matrix<double,N_INPUT_MODEL*N,1> F;			F = Eigen::Matrix<double,N_INPUT_MODEL*N,1>::Zero();
+	Eigen::Matrix<double,N_STATE_MODEL,1> f;				f = Eigen::Matrix<double,N_STATE_MODEL,1>::Zero();
+	Eigen::Matrix<double,N_STATE_MODEL,N_STATE_MODEL> dfdx;	dfdx = Eigen::Matrix<double,N_STATE_MODEL,N_STATE_MODEL>::Zero();
+	Eigen::Matrix<double,N_STATE_MODEL,N_INPUT_MODEL> dfdu;	dfdu = Eigen::Matrix<double,N_STATE_MODEL,N_INPUT_MODEL>::Zero();
+	Eigen::Matrix<double,N_INPUT_MODEL*N,1> F;				F = Eigen::Matrix<double,N_INPUT_MODEL*N,1>::Zero();
 
 	Eigen::Matrix<double,N_STATE_MODEL,1> robotObs;		robotObs = Eigen::Matrix<double,N_STATE_MODEL,1>::Zero();
 	Eigen::Matrix<double,N_STATE_MODEL,1> dHdx;			dHdx = Eigen::Matrix<double,N_STATE_MODEL,1>::Zero();
@@ -320,15 +347,16 @@ Eigen::MatrixXd mpcController::CalcF(Eigen::Matrix<double,N_INPUT_MODEL*N,1> U, 
 	for(i = 0; i < N_STATE_MODEL; i++)
 		xStar(i,0) = x(i,0);
 
+	// forward computation of state
 	for(i = 0; i < N; i++)
 	{
-		// forward computation of state
 		f = A_model*xStar.block(0,i,N_STATE_MODEL,1) + B_model*uStar.block(N_INPUT_MODEL*i,0,N_INPUT_MODEL,1); //+g 変更後 //160721
 		for(j = 0; j < N_STATE_MODEL; j++)
 			xStar(j,i+1) = xStar(j,i)+f(j,0)*dt;
 	}
 
 	// backward computation of co-state variable
+
 	dHdx = S*xStar.block(0,N,N_STATE_MODEL,1)*2.0;
 
 	// init lambdaStar
@@ -338,7 +366,7 @@ Eigen::MatrixXd mpcController::CalcF(Eigen::Matrix<double,N_INPUT_MODEL*N,1> U, 
 	// Derivative of Hamiltonian with respect to x
 	dfdx = A_model;
 	// temp
-	double obj_a[3] = {0.0, 0.0, 0.0}; //temp
+	double obj_a[3] = {100.0, 100.0, 100.0}; //temp
 	//temp
 	for(i = N-1; i >= 0; i--){
 		// collision penalty derivation with respect to x dp/dx
@@ -358,17 +386,20 @@ Eigen::MatrixXd mpcController::CalcF(Eigen::Matrix<double,N_INPUT_MODEL*N,1> U, 
 
 	// Derivative of Hamiltonian with respect to u
 	dfdu = B_model;		//
+
 	for(i = 0; i < N; i++)
 	{
 		dPdu(0,0) = uStar(N_INPUT_MODEL*i,0); //u1 = Fx
 		dPdu(1,0) = uStar(N_INPUT_MODEL*i+1,0); //u2 = Fy
 		// Derivative of input penalty function
-		dPdu = dPdu*4.0*ru*std::max(0.0,pow(uStar(N_INPUT_MODEL*i,0),2.0)+pow(uStar(N_INPUT_MODEL*i+1,0),2.0)-pow(alphaMax,2.0));
-
+		dPdu = dPdu*4.0*ru*std::max(0.0,pow(uStar(N_INPUT_MODEL*i,0),2.0)+pow(uStar(N_INPUT_MODEL*i+1,0),2.0)-pow(MASS_GRAVITY*alphaMax,2.0));
 		dHdu = (R.transpose())*uStar.block(N_INPUT_MODEL*i,0,N_INPUT_MODEL,1)*2.0 + (dfdu.transpose())*lambdaStar.block(0,i+1,N_STATE_MODEL,1)*2.0 + dPdu;
 		for(j = 0; j < N_INPUT_MODEL; j++)
 			F(N_INPUT_MODEL*i+j,0) = dHdu(j,0);
 	}
+
+
+
 
  	return F;
 }
