@@ -47,7 +47,24 @@ struct msgCrazyflie_data_
     , vrpn_oriw_msg(0.0)
     , vrpn_roll_msg(0.0)
     , vrpn_pitch_msg(0.0)
-    , vrpn_yaw_msg(0.0)  {
+    , vrpn_yaw_msg(0.0)
+    , vrpn_time_msg_obs(0.0)
+    , vrpn_posx_msg_obs(0.0)
+    , vrpn_posy_msg_obs(0.0)
+    , vrpn_posz_msg_obs(0.0)
+    , vrpn_velx_msg_obs(0.0)
+    , vrpn_vely_msg_obs(0.0)
+    , vrpn_velz_msg_obs(0.0)
+    , vrpn_linx_msg_obs(0.0)
+    , vrpn_liny_msg_obs(0.0)
+    , vrpn_linz_msg_obs(0.0)
+    , vrpn_orix_msg_obs(0.0)
+    , vrpn_oriy_msg_obs(0.0)
+    , vrpn_oriz_msg_obs(0.0)
+    , vrpn_oriw_msg_obs(0.0)
+    , vrpn_roll_msg_obs(0.0)
+    , vrpn_pitch_msg_obs(0.0)
+    , vrpn_yaw_msg_obs(0.0)  {
     }
   msgCrazyflie_data_(const ContainerAllocator& _alloc)
     : imu_time_msg(0.0)
@@ -73,7 +90,25 @@ struct msgCrazyflie_data_
     , vrpn_oriw_msg(0.0)
     , vrpn_roll_msg(0.0)
     , vrpn_pitch_msg(0.0)
-    , vrpn_yaw_msg(0.0)  {
+    , vrpn_yaw_msg(0.0)
+    , vrpn_time_msg_obs(0.0)
+    , vrpn_posx_msg_obs(0.0)
+    , vrpn_posy_msg_obs(0.0)
+    , vrpn_posz_msg_obs(0.0)
+    , vrpn_velx_msg_obs(0.0)
+    , vrpn_vely_msg_obs(0.0)
+    , vrpn_velz_msg_obs(0.0)
+    , vrpn_linx_msg_obs(0.0)
+    , vrpn_liny_msg_obs(0.0)
+    , vrpn_linz_msg_obs(0.0)
+    , vrpn_orix_msg_obs(0.0)
+    , vrpn_oriy_msg_obs(0.0)
+    , vrpn_oriz_msg_obs(0.0)
+    , vrpn_oriw_msg_obs(0.0)
+    , vrpn_roll_msg_obs(0.0)
+    , vrpn_pitch_msg_obs(0.0)
+    , vrpn_yaw_msg_obs(0.0)  {
+  (void)_alloc;
     }
 
 
@@ -150,6 +185,57 @@ struct msgCrazyflie_data_
    typedef double _vrpn_yaw_msg_type;
   _vrpn_yaw_msg_type vrpn_yaw_msg;
 
+   typedef double _vrpn_time_msg_obs_type;
+  _vrpn_time_msg_obs_type vrpn_time_msg_obs;
+
+   typedef double _vrpn_posx_msg_obs_type;
+  _vrpn_posx_msg_obs_type vrpn_posx_msg_obs;
+
+   typedef double _vrpn_posy_msg_obs_type;
+  _vrpn_posy_msg_obs_type vrpn_posy_msg_obs;
+
+   typedef double _vrpn_posz_msg_obs_type;
+  _vrpn_posz_msg_obs_type vrpn_posz_msg_obs;
+
+   typedef double _vrpn_velx_msg_obs_type;
+  _vrpn_velx_msg_obs_type vrpn_velx_msg_obs;
+
+   typedef double _vrpn_vely_msg_obs_type;
+  _vrpn_vely_msg_obs_type vrpn_vely_msg_obs;
+
+   typedef double _vrpn_velz_msg_obs_type;
+  _vrpn_velz_msg_obs_type vrpn_velz_msg_obs;
+
+   typedef double _vrpn_linx_msg_obs_type;
+  _vrpn_linx_msg_obs_type vrpn_linx_msg_obs;
+
+   typedef double _vrpn_liny_msg_obs_type;
+  _vrpn_liny_msg_obs_type vrpn_liny_msg_obs;
+
+   typedef double _vrpn_linz_msg_obs_type;
+  _vrpn_linz_msg_obs_type vrpn_linz_msg_obs;
+
+   typedef double _vrpn_orix_msg_obs_type;
+  _vrpn_orix_msg_obs_type vrpn_orix_msg_obs;
+
+   typedef double _vrpn_oriy_msg_obs_type;
+  _vrpn_oriy_msg_obs_type vrpn_oriy_msg_obs;
+
+   typedef double _vrpn_oriz_msg_obs_type;
+  _vrpn_oriz_msg_obs_type vrpn_oriz_msg_obs;
+
+   typedef double _vrpn_oriw_msg_obs_type;
+  _vrpn_oriw_msg_obs_type vrpn_oriw_msg_obs;
+
+   typedef double _vrpn_roll_msg_obs_type;
+  _vrpn_roll_msg_obs_type vrpn_roll_msg_obs;
+
+   typedef double _vrpn_pitch_msg_obs_type;
+  _vrpn_pitch_msg_obs_type vrpn_pitch_msg_obs;
+
+   typedef double _vrpn_yaw_msg_obs_type;
+  _vrpn_yaw_msg_obs_type vrpn_yaw_msg_obs;
+
 
 
 
@@ -184,7 +270,7 @@ namespace message_traits
 
 
 // BOOLTRAITS {'IsFixedSize': True, 'IsMessage': True, 'HasHeader': False}
-// {'estimate': ['/home/formation/catkin_ws/src/estimate/msg'], 'std_msgs': ['/opt/ros/indigo/share/std_msgs/cmake/../msg']}
+// {'estimate': ['/home/loic_dubois/Documents/pdm_crazyflie/catkin/src/estimate/msg'], 'std_msgs': ['/opt/ros/kinetic/share/std_msgs/cmake/../msg']}
 
 // !!!!!!!!!!! ['__class__', '__delattr__', '__dict__', '__doc__', '__eq__', '__format__', '__getattribute__', '__hash__', '__init__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_parsed_fields', 'constants', 'fields', 'full_name', 'has_header', 'header_present', 'names', 'package', 'parsed_fields', 'short_name', 'text', 'types']
 
@@ -227,12 +313,12 @@ struct MD5Sum< ::estimate::msgCrazyflie_data_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "ffa6642ffc39e98623b6552d0c85332d";
+    return "7b9455838bed400b7a1587cd4cf1be0a";
   }
 
   static const char* value(const ::estimate::msgCrazyflie_data_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0xffa6642ffc39e986ULL;
-  static const uint64_t static_value2 = 0x23b6552d0c85332dULL;
+  static const uint64_t static_value1 = 0x7b9455838bed400bULL;
+  static const uint64_t static_value2 = 0x7a1587cd4cf1be0aULL;
 };
 
 template<class ContainerAllocator>
@@ -276,6 +362,23 @@ float64 vrpn_roll_msg\n\
 float64 vrpn_pitch_msg\n\
 float64 vrpn_yaw_msg\n\
 \n\
+float64 vrpn_time_msg_obs\n\
+float64 vrpn_posx_msg_obs\n\
+float64 vrpn_posy_msg_obs\n\
+float64 vrpn_posz_msg_obs\n\
+float64 vrpn_velx_msg_obs\n\
+float64 vrpn_vely_msg_obs\n\
+float64 vrpn_velz_msg_obs\n\
+float64 vrpn_linx_msg_obs\n\
+float64 vrpn_liny_msg_obs\n\
+float64 vrpn_linz_msg_obs\n\
+float64 vrpn_orix_msg_obs\n\
+float64 vrpn_oriy_msg_obs\n\
+float64 vrpn_oriz_msg_obs\n\
+float64 vrpn_oriw_msg_obs\n\
+float64 vrpn_roll_msg_obs\n\
+float64 vrpn_pitch_msg_obs\n\
+float64 vrpn_yaw_msg_obs\n\
 ";
   }
 
@@ -318,6 +421,23 @@ namespace serialization
       stream.next(m.vrpn_roll_msg);
       stream.next(m.vrpn_pitch_msg);
       stream.next(m.vrpn_yaw_msg);
+      stream.next(m.vrpn_time_msg_obs);
+      stream.next(m.vrpn_posx_msg_obs);
+      stream.next(m.vrpn_posy_msg_obs);
+      stream.next(m.vrpn_posz_msg_obs);
+      stream.next(m.vrpn_velx_msg_obs);
+      stream.next(m.vrpn_vely_msg_obs);
+      stream.next(m.vrpn_velz_msg_obs);
+      stream.next(m.vrpn_linx_msg_obs);
+      stream.next(m.vrpn_liny_msg_obs);
+      stream.next(m.vrpn_linz_msg_obs);
+      stream.next(m.vrpn_orix_msg_obs);
+      stream.next(m.vrpn_oriy_msg_obs);
+      stream.next(m.vrpn_oriz_msg_obs);
+      stream.next(m.vrpn_oriw_msg_obs);
+      stream.next(m.vrpn_roll_msg_obs);
+      stream.next(m.vrpn_pitch_msg_obs);
+      stream.next(m.vrpn_yaw_msg_obs);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER;
@@ -384,6 +504,40 @@ struct Printer< ::estimate::msgCrazyflie_data_<ContainerAllocator> >
     Printer<double>::stream(s, indent + "  ", v.vrpn_pitch_msg);
     s << indent << "vrpn_yaw_msg: ";
     Printer<double>::stream(s, indent + "  ", v.vrpn_yaw_msg);
+    s << indent << "vrpn_time_msg_obs: ";
+    Printer<double>::stream(s, indent + "  ", v.vrpn_time_msg_obs);
+    s << indent << "vrpn_posx_msg_obs: ";
+    Printer<double>::stream(s, indent + "  ", v.vrpn_posx_msg_obs);
+    s << indent << "vrpn_posy_msg_obs: ";
+    Printer<double>::stream(s, indent + "  ", v.vrpn_posy_msg_obs);
+    s << indent << "vrpn_posz_msg_obs: ";
+    Printer<double>::stream(s, indent + "  ", v.vrpn_posz_msg_obs);
+    s << indent << "vrpn_velx_msg_obs: ";
+    Printer<double>::stream(s, indent + "  ", v.vrpn_velx_msg_obs);
+    s << indent << "vrpn_vely_msg_obs: ";
+    Printer<double>::stream(s, indent + "  ", v.vrpn_vely_msg_obs);
+    s << indent << "vrpn_velz_msg_obs: ";
+    Printer<double>::stream(s, indent + "  ", v.vrpn_velz_msg_obs);
+    s << indent << "vrpn_linx_msg_obs: ";
+    Printer<double>::stream(s, indent + "  ", v.vrpn_linx_msg_obs);
+    s << indent << "vrpn_liny_msg_obs: ";
+    Printer<double>::stream(s, indent + "  ", v.vrpn_liny_msg_obs);
+    s << indent << "vrpn_linz_msg_obs: ";
+    Printer<double>::stream(s, indent + "  ", v.vrpn_linz_msg_obs);
+    s << indent << "vrpn_orix_msg_obs: ";
+    Printer<double>::stream(s, indent + "  ", v.vrpn_orix_msg_obs);
+    s << indent << "vrpn_oriy_msg_obs: ";
+    Printer<double>::stream(s, indent + "  ", v.vrpn_oriy_msg_obs);
+    s << indent << "vrpn_oriz_msg_obs: ";
+    Printer<double>::stream(s, indent + "  ", v.vrpn_oriz_msg_obs);
+    s << indent << "vrpn_oriw_msg_obs: ";
+    Printer<double>::stream(s, indent + "  ", v.vrpn_oriw_msg_obs);
+    s << indent << "vrpn_roll_msg_obs: ";
+    Printer<double>::stream(s, indent + "  ", v.vrpn_roll_msg_obs);
+    s << indent << "vrpn_pitch_msg_obs: ";
+    Printer<double>::stream(s, indent + "  ", v.vrpn_pitch_msg_obs);
+    s << indent << "vrpn_yaw_msg_obs: ";
+    Printer<double>::stream(s, indent + "  ", v.vrpn_yaw_msg_obs);
   }
 };
 

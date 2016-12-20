@@ -1,0 +1,8 @@
+prefix=/home/loic_dubois/Documents/pdm_crazyflie/catkin/install_isolated
+
+Name: crazyflie_controller
+Description: Description of crazyflie_controller
+Version: 0.0.1
+Cflags: 
+Libs: -L/home/loic_dubois/Documents/pdm_crazyflie/catkin/install_isolated/lib 
+Requires: 

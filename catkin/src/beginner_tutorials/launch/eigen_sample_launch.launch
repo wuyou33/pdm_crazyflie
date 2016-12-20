@@ -1,0 +1,7 @@
+<launch>
+	<node name="eigen_sample" pkg="beginner_tutorials" type="eigen_sample" output="screen">
+        <param name="iii" value="2"/>
+        <param name="rv" value="5.0"/>
+
+	</node>
+</launch>

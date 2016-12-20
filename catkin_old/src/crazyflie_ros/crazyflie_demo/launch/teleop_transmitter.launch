@@ -1,0 +1,34 @@
+<launch>
+  <arg name="uri" default="radio://0/50/1M" /><!--0/70/2M-->
+  <!--arg name="uri" default="radio://0/77/250k" /-->
+  <!--arg name="uri" default="radio://0/80/250k" /-->
+  <arg name="joy_dev" default="/dev/input/js0" />
+  <arg name="autorepeat_rate_" default="100" />
+
+  <include file="$(find crazyflie_driver)/launch/crazyflie_server.launch">
+  </include>
+
+
+  <!--<param name="crazyflie/pid_rate/yaw_kp" value="200"/>-->
+  <include file="$(find crazyflie_driver)/launch/crazyflie_add.launch">
+  <arg name="uri" value="$(arg uri)" />
+  <arg name="tf_prefix" value="crazyflie" />
+  </include>
+
+  <node name="joy" pkg="joy" type="joy_node" output="screen" >
+  <param name="dev" value="$(arg joy_dev)" />
+  <param name="autorepeat_rate" value="$(arg autorepeat_rate_)" />
+  </node>
+
+  <include file="$(find crazyflie_demo)/launch/ps3_test2.launch">
+  </include>
+
+<!--node name="crazyflie_demo_controller" pkg="crazyflie_demo" type="controller.py" output="screen"-->
+<!--/node-->
+
+  <!--node pkg="rviz" type="rviz" name="rviz" args="-d $(find crazyflie_demo)/launch/crazyflie.rviz" /-->
+
+  <!--node pkg="rqt_plot" type="rqt_plot" name="rqt_plot" args="/crazyflie/temperature/temperature"/-->
+
+  <!--node pkg="rqt_plot" type="rqt_plot" name="rqt_plot2" args="/crazyflie/battery"/-->
+</launch>

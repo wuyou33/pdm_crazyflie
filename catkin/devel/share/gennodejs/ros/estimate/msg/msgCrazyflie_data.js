@@ -37,6 +37,23 @@ class msgCrazyflie_data {
     this.vrpn_roll_msg = 0.0;
     this.vrpn_pitch_msg = 0.0;
     this.vrpn_yaw_msg = 0.0;
+    this.vrpn_time_msg_obs = 0.0;
+    this.vrpn_posx_msg_obs = 0.0;
+    this.vrpn_posy_msg_obs = 0.0;
+    this.vrpn_posz_msg_obs = 0.0;
+    this.vrpn_velx_msg_obs = 0.0;
+    this.vrpn_vely_msg_obs = 0.0;
+    this.vrpn_velz_msg_obs = 0.0;
+    this.vrpn_linx_msg_obs = 0.0;
+    this.vrpn_liny_msg_obs = 0.0;
+    this.vrpn_linz_msg_obs = 0.0;
+    this.vrpn_orix_msg_obs = 0.0;
+    this.vrpn_oriy_msg_obs = 0.0;
+    this.vrpn_oriz_msg_obs = 0.0;
+    this.vrpn_oriw_msg_obs = 0.0;
+    this.vrpn_roll_msg_obs = 0.0;
+    this.vrpn_pitch_msg_obs = 0.0;
+    this.vrpn_yaw_msg_obs = 0.0;
   }
 
   static serialize(obj, bufferInfo) {
@@ -89,6 +106,40 @@ class msgCrazyflie_data {
     bufferInfo = _serializer.float64(obj.vrpn_pitch_msg, bufferInfo);
     // Serialize message field [vrpn_yaw_msg]
     bufferInfo = _serializer.float64(obj.vrpn_yaw_msg, bufferInfo);
+    // Serialize message field [vrpn_time_msg_obs]
+    bufferInfo = _serializer.float64(obj.vrpn_time_msg_obs, bufferInfo);
+    // Serialize message field [vrpn_posx_msg_obs]
+    bufferInfo = _serializer.float64(obj.vrpn_posx_msg_obs, bufferInfo);
+    // Serialize message field [vrpn_posy_msg_obs]
+    bufferInfo = _serializer.float64(obj.vrpn_posy_msg_obs, bufferInfo);
+    // Serialize message field [vrpn_posz_msg_obs]
+    bufferInfo = _serializer.float64(obj.vrpn_posz_msg_obs, bufferInfo);
+    // Serialize message field [vrpn_velx_msg_obs]
+    bufferInfo = _serializer.float64(obj.vrpn_velx_msg_obs, bufferInfo);
+    // Serialize message field [vrpn_vely_msg_obs]
+    bufferInfo = _serializer.float64(obj.vrpn_vely_msg_obs, bufferInfo);
+    // Serialize message field [vrpn_velz_msg_obs]
+    bufferInfo = _serializer.float64(obj.vrpn_velz_msg_obs, bufferInfo);
+    // Serialize message field [vrpn_linx_msg_obs]
+    bufferInfo = _serializer.float64(obj.vrpn_linx_msg_obs, bufferInfo);
+    // Serialize message field [vrpn_liny_msg_obs]
+    bufferInfo = _serializer.float64(obj.vrpn_liny_msg_obs, bufferInfo);
+    // Serialize message field [vrpn_linz_msg_obs]
+    bufferInfo = _serializer.float64(obj.vrpn_linz_msg_obs, bufferInfo);
+    // Serialize message field [vrpn_orix_msg_obs]
+    bufferInfo = _serializer.float64(obj.vrpn_orix_msg_obs, bufferInfo);
+    // Serialize message field [vrpn_oriy_msg_obs]
+    bufferInfo = _serializer.float64(obj.vrpn_oriy_msg_obs, bufferInfo);
+    // Serialize message field [vrpn_oriz_msg_obs]
+    bufferInfo = _serializer.float64(obj.vrpn_oriz_msg_obs, bufferInfo);
+    // Serialize message field [vrpn_oriw_msg_obs]
+    bufferInfo = _serializer.float64(obj.vrpn_oriw_msg_obs, bufferInfo);
+    // Serialize message field [vrpn_roll_msg_obs]
+    bufferInfo = _serializer.float64(obj.vrpn_roll_msg_obs, bufferInfo);
+    // Serialize message field [vrpn_pitch_msg_obs]
+    bufferInfo = _serializer.float64(obj.vrpn_pitch_msg_obs, bufferInfo);
+    // Serialize message field [vrpn_yaw_msg_obs]
+    bufferInfo = _serializer.float64(obj.vrpn_yaw_msg_obs, bufferInfo);
     return bufferInfo;
   }
 
@@ -193,6 +244,74 @@ class msgCrazyflie_data {
     tmp = _deserializer.float64(buffer);
     data.vrpn_yaw_msg = tmp.data;
     buffer = tmp.buffer;
+    // Deserialize message field [vrpn_time_msg_obs]
+    tmp = _deserializer.float64(buffer);
+    data.vrpn_time_msg_obs = tmp.data;
+    buffer = tmp.buffer;
+    // Deserialize message field [vrpn_posx_msg_obs]
+    tmp = _deserializer.float64(buffer);
+    data.vrpn_posx_msg_obs = tmp.data;
+    buffer = tmp.buffer;
+    // Deserialize message field [vrpn_posy_msg_obs]
+    tmp = _deserializer.float64(buffer);
+    data.vrpn_posy_msg_obs = tmp.data;
+    buffer = tmp.buffer;
+    // Deserialize message field [vrpn_posz_msg_obs]
+    tmp = _deserializer.float64(buffer);
+    data.vrpn_posz_msg_obs = tmp.data;
+    buffer = tmp.buffer;
+    // Deserialize message field [vrpn_velx_msg_obs]
+    tmp = _deserializer.float64(buffer);
+    data.vrpn_velx_msg_obs = tmp.data;
+    buffer = tmp.buffer;
+    // Deserialize message field [vrpn_vely_msg_obs]
+    tmp = _deserializer.float64(buffer);
+    data.vrpn_vely_msg_obs = tmp.data;
+    buffer = tmp.buffer;
+    // Deserialize message field [vrpn_velz_msg_obs]
+    tmp = _deserializer.float64(buffer);
+    data.vrpn_velz_msg_obs = tmp.data;
+    buffer = tmp.buffer;
+    // Deserialize message field [vrpn_linx_msg_obs]
+    tmp = _deserializer.float64(buffer);
+    data.vrpn_linx_msg_obs = tmp.data;
+    buffer = tmp.buffer;
+    // Deserialize message field [vrpn_liny_msg_obs]
+    tmp = _deserializer.float64(buffer);
+    data.vrpn_liny_msg_obs = tmp.data;
+    buffer = tmp.buffer;
+    // Deserialize message field [vrpn_linz_msg_obs]
+    tmp = _deserializer.float64(buffer);
+    data.vrpn_linz_msg_obs = tmp.data;
+    buffer = tmp.buffer;
+    // Deserialize message field [vrpn_orix_msg_obs]
+    tmp = _deserializer.float64(buffer);
+    data.vrpn_orix_msg_obs = tmp.data;
+    buffer = tmp.buffer;
+    // Deserialize message field [vrpn_oriy_msg_obs]
+    tmp = _deserializer.float64(buffer);
+    data.vrpn_oriy_msg_obs = tmp.data;
+    buffer = tmp.buffer;
+    // Deserialize message field [vrpn_oriz_msg_obs]
+    tmp = _deserializer.float64(buffer);
+    data.vrpn_oriz_msg_obs = tmp.data;
+    buffer = tmp.buffer;
+    // Deserialize message field [vrpn_oriw_msg_obs]
+    tmp = _deserializer.float64(buffer);
+    data.vrpn_oriw_msg_obs = tmp.data;
+    buffer = tmp.buffer;
+    // Deserialize message field [vrpn_roll_msg_obs]
+    tmp = _deserializer.float64(buffer);
+    data.vrpn_roll_msg_obs = tmp.data;
+    buffer = tmp.buffer;
+    // Deserialize message field [vrpn_pitch_msg_obs]
+    tmp = _deserializer.float64(buffer);
+    data.vrpn_pitch_msg_obs = tmp.data;
+    buffer = tmp.buffer;
+    // Deserialize message field [vrpn_yaw_msg_obs]
+    tmp = _deserializer.float64(buffer);
+    data.vrpn_yaw_msg_obs = tmp.data;
+    buffer = tmp.buffer;
     return {
       data: data,
       buffer: buffer
@@ -206,7 +325,7 @@ class msgCrazyflie_data {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return 'ffa6642ffc39e98623b6552d0c85332d';
+    return '7b9455838bed400b7a1587cd4cf1be0a';
   }
 
   static messageDefinition() {
@@ -237,6 +356,23 @@ class msgCrazyflie_data {
     float64 vrpn_pitch_msg
     float64 vrpn_yaw_msg
     
+    float64 vrpn_time_msg_obs
+    float64 vrpn_posx_msg_obs
+    float64 vrpn_posy_msg_obs
+    float64 vrpn_posz_msg_obs
+    float64 vrpn_velx_msg_obs
+    float64 vrpn_vely_msg_obs
+    float64 vrpn_velz_msg_obs
+    float64 vrpn_linx_msg_obs
+    float64 vrpn_liny_msg_obs
+    float64 vrpn_linz_msg_obs
+    float64 vrpn_orix_msg_obs
+    float64 vrpn_oriy_msg_obs
+    float64 vrpn_oriz_msg_obs
+    float64 vrpn_oriw_msg_obs
+    float64 vrpn_roll_msg_obs
+    float64 vrpn_pitch_msg_obs
+    float64 vrpn_yaw_msg_obs
     
     `;
   }

@@ -24,14 +24,14 @@ struct msgMpc_input_
   typedef msgMpc_input_<ContainerAllocator> Type;
 
   msgMpc_input_()
-    : rollPhi(0.0)
+    : phiRoll(0.0)
     , thetaPitch(0.0)
     , psiYawRate(0.0)
     , thrust(0.0)
     , controlFlag(0)  {
     }
   msgMpc_input_(const ContainerAllocator& _alloc)
-    : rollPhi(0.0)
+    : phiRoll(0.0)
     , thetaPitch(0.0)
     , psiYawRate(0.0)
     , thrust(0.0)
@@ -41,8 +41,8 @@ struct msgMpc_input_
 
 
 
-   typedef double _rollPhi_type;
-  _rollPhi_type rollPhi;
+   typedef double _phiRoll_type;
+  _phiRoll_type phiRoll;
 
    typedef double _thetaPitch_type;
   _thetaPitch_type thetaPitch;
@@ -133,12 +133,12 @@ struct MD5Sum< ::mpc::msgMpc_input_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "64731ea8c92ca2a1540116905352cf9e";
+    return "e0da2c5bb3ec837d5a086132e8c0fb40";
   }
 
   static const char* value(const ::mpc::msgMpc_input_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x64731ea8c92ca2a1ULL;
-  static const uint64_t static_value2 = 0x540116905352cf9eULL;
+  static const uint64_t static_value1 = 0xe0da2c5bb3ec837dULL;
+  static const uint64_t static_value2 = 0x5a086132e8c0fb40ULL;
 };
 
 template<class ContainerAllocator>
@@ -157,7 +157,7 @@ struct Definition< ::mpc::msgMpc_input_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "float64 rollPhi\n\
+    return "float64 phiRoll\n\
 float64 thetaPitch\n\
 float64 psiYawRate\n\
 float64 thrust\n\
@@ -181,7 +181,7 @@ namespace serialization
   {
     template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
     {
-      stream.next(m.rollPhi);
+      stream.next(m.phiRoll);
       stream.next(m.thetaPitch);
       stream.next(m.psiYawRate);
       stream.next(m.thrust);
@@ -204,8 +204,8 @@ struct Printer< ::mpc::msgMpc_input_<ContainerAllocator> >
 {
   template<typename Stream> static void stream(Stream& s, const std::string& indent, const ::mpc::msgMpc_input_<ContainerAllocator>& v)
   {
-    s << indent << "rollPhi: ";
-    Printer<double>::stream(s, indent + "  ", v.rollPhi);
+    s << indent << "phiRoll: ";
+    Printer<double>::stream(s, indent + "  ", v.phiRoll);
     s << indent << "thetaPitch: ";
     Printer<double>::stream(s, indent + "  ", v.thetaPitch);
     s << indent << "psiYawRate: ";

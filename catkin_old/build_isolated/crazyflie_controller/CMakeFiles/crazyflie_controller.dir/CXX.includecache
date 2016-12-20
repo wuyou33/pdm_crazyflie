@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/loic_dubois/Documents/pdm_crazyflie/catkin/src/crazyflie_ros/crazyflie_controller/src/controller.cpp
+ros/ros.h
+-
+tf/transform_listener.h
+-
+std_srvs/Empty.h
+-
+geometry_msgs/Twist.h
+-
+pid.hpp
+/home/loic_dubois/Documents/pdm_crazyflie/catkin/src/crazyflie_ros/crazyflie_controller/src/pid.hpp
+
+/home/loic_dubois/Documents/pdm_crazyflie/catkin/src/crazyflie_ros/crazyflie_controller/src/pid.hpp
+ros/ros.h
+-
+

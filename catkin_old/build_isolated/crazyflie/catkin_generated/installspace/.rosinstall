@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/loic_dubois/Documents/pdm_crazyflie/catkin/install_isolated/setup.sh

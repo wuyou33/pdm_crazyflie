@@ -7,7 +7,7 @@ set ref:
 rostopic pub /pos_msg generate_reference/msgReference '1' '0.0' '0.0' '0.00001'
 
 run controller:
-rostopic pub /crazyflie_data_msg estimate/msgCrazyflie_data '0.0' '0.0' '0.0' '0.0' '0.0' '0.0' '0.0' '0.0' '1.0' '1.0' '1.0' '0.01' '0.01' '0.01' '0.0' '0.0' '0.0' '0.0' '0.0' '0.0' '0.0' '0.0' '0.0' '0.0' 
+rostopic pub /crazyflie_data_msg estimate/msgCrazyflie_data '0.0' '0.0' '0.0' '0.0' '0.0' '0.0' '0.0' '0.0' '1.0' '1.0' '1.0' '0.01' '0.01' '0.01' '0.0' '0.0' '0.0' '0.0' '0.0' '0.0' '0.0' '0.0' '0.0' '0.0'
 
  rosmsg show estimate/msgCrazyflie_data 
 float64 imu_time_msg

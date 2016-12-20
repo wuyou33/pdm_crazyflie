@@ -14,27 +14,27 @@
 
 (defclass mpc::msgMpc_input
   :super ros::object
-  :slots (_rollPhi _thetaPitch _psiYawRate _thrust _controlFlag ))
+  :slots (_phiRoll _thetaPitch _psiYawRate _thrust _controlFlag ))
 
 (defmethod mpc::msgMpc_input
   (:init
    (&key
-    ((:rollPhi __rollPhi) 0.0)
+    ((:phiRoll __phiRoll) 0.0)
     ((:thetaPitch __thetaPitch) 0.0)
     ((:psiYawRate __psiYawRate) 0.0)
     ((:thrust __thrust) 0.0)
     ((:controlFlag __controlFlag) 0)
     )
    (send-super :init)
-   (setq _rollPhi (float __rollPhi))
+   (setq _phiRoll (float __phiRoll))
    (setq _thetaPitch (float __thetaPitch))
    (setq _psiYawRate (float __psiYawRate))
    (setq _thrust (float __thrust))
    (setq _controlFlag (round __controlFlag))
    self)
-  (:rollPhi
-   (&optional __rollPhi)
-   (if __rollPhi (setq _rollPhi __rollPhi)) _rollPhi)
+  (:phiRoll
+   (&optional __phiRoll)
+   (if __phiRoll (setq _phiRoll __phiRoll)) _phiRoll)
   (:thetaPitch
    (&optional __thetaPitch)
    (if __thetaPitch (setq _thetaPitch __thetaPitch)) _thetaPitch)
@@ -50,7 +50,7 @@
   (:serialization-length
    ()
    (+
-    ;; float64 _rollPhi
+    ;; float64 _phiRoll
     8
     ;; float64 _thetaPitch
     8
@@ -65,8 +65,8 @@
    (&optional strm)
    (let ((s (if strm strm
               (make-string-output-stream (send self :serialization-length)))))
-     ;; float64 _rollPhi
-       (sys::poke _rollPhi (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
+     ;; float64 _phiRoll
+       (sys::poke _phiRoll (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
      ;; float64 _thetaPitch
        (sys::poke _thetaPitch (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
      ;; float64 _psiYawRate
@@ -79,8 +79,8 @@
      (if (null strm) (get-output-stream-string s))))
   (:deserialize
    (buf &optional (ptr- 0))
-   ;; float64 _rollPhi
-     (setq _rollPhi (sys::peek buf ptr- :double)) (incf ptr- 8)
+   ;; float64 _phiRoll
+     (setq _phiRoll (sys::peek buf ptr- :double)) (incf ptr- 8)
    ;; float64 _thetaPitch
      (setq _thetaPitch (sys::peek buf ptr- :double)) (incf ptr- 8)
    ;; float64 _psiYawRate
@@ -94,10 +94,10 @@
    self)
   )
 
-(setf (get mpc::msgMpc_input :md5sum-) "64731ea8c92ca2a1540116905352cf9e")
+(setf (get mpc::msgMpc_input :md5sum-) "e0da2c5bb3ec837d5a086132e8c0fb40")
 (setf (get mpc::msgMpc_input :datatype-) "mpc/msgMpc_input")
 (setf (get mpc::msgMpc_input :definition-)
-      "float64 rollPhi
+      "float64 phiRoll
 float64 thetaPitch
 float64 psiYawRate
 float64 thrust
@@ -108,6 +108,6 @@ int8 controlFlag
 
 
 
-(provide :mpc/msgMpc_input "64731ea8c92ca2a1540116905352cf9e")
+(provide :mpc/msgMpc_input "e0da2c5bb3ec837d5a086132e8c0fb40")
 
 

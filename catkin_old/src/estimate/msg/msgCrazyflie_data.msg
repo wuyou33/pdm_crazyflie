@@ -1,0 +1,25 @@
+float64 imu_time_msg
+float64 imu_angx_msg
+float64 imu_angy_msg
+float64 imu_angz_msg
+float64 imu_linx_msg
+float64 imu_liny_msg
+float64 imu_linz_msg
+float64 vrpn_time_msg
+float64 vrpn_posx_msg
+float64 vrpn_posy_msg
+float64 vrpn_posz_msg
+float64 vrpn_velx_msg
+float64 vrpn_vely_msg
+float64 vrpn_velz_msg
+float64 vrpn_linx_msg
+float64 vrpn_liny_msg
+float64 vrpn_linz_msg
+float64 vrpn_orix_msg
+float64 vrpn_oriy_msg
+float64 vrpn_oriz_msg
+float64 vrpn_oriw_msg
+float64 vrpn_roll_msg
+float64 vrpn_pitch_msg
+float64 vrpn_yaw_msg
+

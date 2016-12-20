@@ -1,6 +1,6 @@
 (cl:in-package mpc-msg)
-(cl:export '(ROLLPHI-VAL
-          ROLLPHI
+(cl:export '(PHIROLL-VAL
+          PHIROLL
           THETAPITCH-VAL
           THETAPITCH
           PSIYAWRATE-VAL

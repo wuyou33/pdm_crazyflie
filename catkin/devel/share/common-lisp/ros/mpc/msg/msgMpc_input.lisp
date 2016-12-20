@@ -7,9 +7,9 @@
 ;//! \htmlinclude msgMpc_input.msg.html
 
 (cl:defclass <msgMpc_input> (roslisp-msg-protocol:ros-message)
-  ((rollPhi
-    :reader rollPhi
-    :initarg :rollPhi
+  ((phiRoll
+    :reader phiRoll
+    :initarg :phiRoll
     :type cl:float
     :initform 0.0)
    (thetaPitch
@@ -42,10 +42,10 @@
   (cl:unless (cl:typep m 'msgMpc_input)
     (roslisp-msg-protocol:msg-deprecation-warning "using old message class name mpc-msg:<msgMpc_input> is deprecated: use mpc-msg:msgMpc_input instead.")))
 
-(cl:ensure-generic-function 'rollPhi-val :lambda-list '(m))
-(cl:defmethod rollPhi-val ((m <msgMpc_input>))
-  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader mpc-msg:rollPhi-val is deprecated.  Use mpc-msg:rollPhi instead.")
-  (rollPhi m))
+(cl:ensure-generic-function 'phiRoll-val :lambda-list '(m))
+(cl:defmethod phiRoll-val ((m <msgMpc_input>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader mpc-msg:phiRoll-val is deprecated.  Use mpc-msg:phiRoll instead.")
+  (phiRoll m))
 
 (cl:ensure-generic-function 'thetaPitch-val :lambda-list '(m))
 (cl:defmethod thetaPitch-val ((m <msgMpc_input>))
@@ -68,7 +68,7 @@
   (controlFlag m))
 (cl:defmethod roslisp-msg-protocol:serialize ((msg <msgMpc_input>) ostream)
   "Serializes a message object of type '<msgMpc_input>"
-  (cl:let ((bits (roslisp-utils:encode-double-float-bits (cl:slot-value msg 'rollPhi))))
+  (cl:let ((bits (roslisp-utils:encode-double-float-bits (cl:slot-value msg 'phiRoll))))
     (cl:write-byte (cl:ldb (cl:byte 8 0) bits) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 8) bits) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 16) bits) ostream)
@@ -119,7 +119,7 @@
       (cl:setf (cl:ldb (cl:byte 8 40) bits) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 48) bits) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 56) bits) (cl:read-byte istream))
-    (cl:setf (cl:slot-value msg 'rollPhi) (roslisp-utils:decode-double-float-bits bits)))
+    (cl:setf (cl:slot-value msg 'phiRoll) (roslisp-utils:decode-double-float-bits bits)))
     (cl:let ((bits 0))
       (cl:setf (cl:ldb (cl:byte 8 0) bits) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 8) bits) (cl:read-byte istream))
@@ -163,16 +163,16 @@
   "mpc/msgMpc_input")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql '<msgMpc_input>)))
   "Returns md5sum for a message object of type '<msgMpc_input>"
-  "64731ea8c92ca2a1540116905352cf9e")
+  "e0da2c5bb3ec837d5a086132e8c0fb40")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql 'msgMpc_input)))
   "Returns md5sum for a message object of type 'msgMpc_input"
-  "64731ea8c92ca2a1540116905352cf9e")
+  "e0da2c5bb3ec837d5a086132e8c0fb40")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<msgMpc_input>)))
   "Returns full string definition for message of type '<msgMpc_input>"
-  (cl:format cl:nil "float64 rollPhi~%float64 thetaPitch~%float64 psiYawRate~%float64 thrust~%~%int8 controlFlag~%~%~%"))
+  (cl:format cl:nil "float64 phiRoll~%float64 thetaPitch~%float64 psiYawRate~%float64 thrust~%~%int8 controlFlag~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'msgMpc_input)))
   "Returns full string definition for message of type 'msgMpc_input"
-  (cl:format cl:nil "float64 rollPhi~%float64 thetaPitch~%float64 psiYawRate~%float64 thrust~%~%int8 controlFlag~%~%~%"))
+  (cl:format cl:nil "float64 phiRoll~%float64 thetaPitch~%float64 psiYawRate~%float64 thrust~%~%int8 controlFlag~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <msgMpc_input>))
   (cl:+ 0
      8
@@ -184,7 +184,7 @@
 (cl:defmethod roslisp-msg-protocol:ros-message-to-list ((msg <msgMpc_input>))
   "Converts a ROS message object to a list"
   (cl:list 'msgMpc_input
-    (cl:cons ':rollPhi (rollPhi msg))
+    (cl:cons ':phiRoll (phiRoll msg))
     (cl:cons ':thetaPitch (thetaPitch msg))
     (cl:cons ':psiYawRate (psiYawRate msg))
     (cl:cons ':thrust (thrust msg))

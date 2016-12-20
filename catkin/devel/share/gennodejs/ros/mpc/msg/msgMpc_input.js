@@ -13,7 +13,7 @@ let _finder = require('../find.js');
 
 class msgMpc_input {
   constructor() {
-    this.rollPhi = 0.0;
+    this.phiRoll = 0.0;
     this.thetaPitch = 0.0;
     this.psiYawRate = 0.0;
     this.thrust = 0.0;
@@ -22,8 +22,8 @@ class msgMpc_input {
 
   static serialize(obj, bufferInfo) {
     // Serializes a message object of type msgMpc_input
-    // Serialize message field [rollPhi]
-    bufferInfo = _serializer.float64(obj.rollPhi, bufferInfo);
+    // Serialize message field [phiRoll]
+    bufferInfo = _serializer.float64(obj.phiRoll, bufferInfo);
     // Serialize message field [thetaPitch]
     bufferInfo = _serializer.float64(obj.thetaPitch, bufferInfo);
     // Serialize message field [psiYawRate]
@@ -40,9 +40,9 @@ class msgMpc_input {
     let tmp;
     let len;
     let data = new msgMpc_input();
-    // Deserialize message field [rollPhi]
+    // Deserialize message field [phiRoll]
     tmp = _deserializer.float64(buffer);
-    data.rollPhi = tmp.data;
+    data.phiRoll = tmp.data;
     buffer = tmp.buffer;
     // Deserialize message field [thetaPitch]
     tmp = _deserializer.float64(buffer);
@@ -73,13 +73,13 @@ class msgMpc_input {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '64731ea8c92ca2a1540116905352cf9e';
+    return 'e0da2c5bb3ec837d5a086132e8c0fb40';
   }
 
   static messageDefinition() {
     // Returns full string definition for message
     return `
-    float64 rollPhi
+    float64 phiRoll
     float64 thetaPitch
     float64 psiYawRate
     float64 thrust

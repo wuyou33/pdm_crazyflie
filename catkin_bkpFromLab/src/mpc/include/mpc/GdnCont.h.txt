@@ -1,0 +1,39 @@
+#pragma once
+
+#include "Lib/Umatrix.h"
+
+//MPCステップ数
+#define N (int)20
+
+class CGdnCont
+{
+public:
+	CGdnCont(void);
+	~CGdnCont(void);
+
+	// 制御演算
+	void ResetCont(SensorData);
+	void GdnCont(RefNext, SensorData);
+
+	RefData GetRefData(void){return (this->m_RefData);};
+
+	int mpctime;
+
+protected:
+
+	RefData		m_RefData;
+
+	void F2Att(void);
+	void Rot2Att(void);
+	void FDGMRES(void);
+	CUMatrix<double, const double&> CalcF(CUMatrix<double, const double&>, CUMatrix<double, const double&>);
+	CUMatrix<double, const double&> Cross(CUMatrix<double, const double&>, CUMatrix<double, const double&>);
+	CUMatrix<double, const double&> Trans(CUMatrix<double, const double&>);
+
+	int SW;
+	CUMatrix<double, const double&> U,X,dX,dU;
+
+	CUMatrix<double, const double&> S,Q,R;
+	double dt,obj_a[3],obj[3],rx,ru,phi_max,Rr;
+
+};

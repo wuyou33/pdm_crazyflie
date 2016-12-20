@@ -157,7 +157,7 @@ void controllerLoopCallback(const estimate::msgCrazyflie_data& esti_msg)
 	pitchDesired = pitchYawRotated;
 
 	// Sum input (MPC or Joystick)
-	mpcInputMsg.rollPhi = rollDesired   + offset_phi;
+	mpcInputMsg.phiRoll = rollDesired   + offset_phi;
 	mpcInputMsg.thetaPitch = pitchDesired + offset_the;
 	mpcInputMsg.psiYawRate = yawRateDesired;
 	mpcInputMsg.thrust = thrustDesired + offset_thr;
@@ -187,8 +187,11 @@ int main(int argc, char **argv)
 
 	subGetControlMode = nh.subscribe("joy",1, getControlModeCallback);
 	subGetRef = nh.subscribe("pos_msg",1, getRefCallback);
-	subGetJoystickCommand = nh.subscribe("/crazyflie/cmd_vel",1, getJoystickCommandCallback);
-	subControllerLoop = nh.subscribe("crazyflie_data_msg",1, controllerLoopCallback);
+	subGetJoystickCommand = nh.subscribe("/cf1/cmd_vel",1, getJoystickCommandCallback);
+	subGetJoystickCommand = nh.subscribe("/cf2/cmd_vel",1, getJoystickCommandCallback);
+	subGetJoystickCommand = nh.subscribe("/cf3/cmd_vel",1, getJoystickCommandCallback);
+	subGetJoystickCommand = nh.subscribe("/cf4/cmd_vel",1, getJoystickCommandCallback);
+	subControllerLoop = nh.subscribe("crazyflieMeasurementData",1, controllerLoopCallback);
 	pubMpcInput = nh.advertise<mpc::msgMpc_input>("mpcInputMsg",100);
 	pubMpcData = nh.advertise<mpc::msgMpc_data>("mpcDataMsg",100);
 

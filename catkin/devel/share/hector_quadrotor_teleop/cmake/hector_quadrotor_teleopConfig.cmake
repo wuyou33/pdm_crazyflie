@@ -91,9 +91,9 @@ endif()
 # flag project as catkin-based to distinguish if a find_package()-ed project is a catkin project
 set(hector_quadrotor_teleop_FOUND_CATKIN_PROJECT TRUE)
 
-if(NOT " " STREQUAL " ")
+if(NOT "/home/loic_dubois/Documents/pdm_crazyflie/catkin/devel/include " STREQUAL " ")
   set(hector_quadrotor_teleop_INCLUDE_DIRS "")
-  set(_include_dirs "")
+  set(_include_dirs "/home/loic_dubois/Documents/pdm_crazyflie/catkin/devel/include")
   foreach(idir ${_include_dirs})
     if(IS_ABSOLUTE ${idir} AND IS_DIRECTORY ${idir})
       set(include ${idir})
@@ -122,7 +122,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/loic_dubois/Documents/pdm_crazyflie/catkin/devel/lib;/opt/ros/kinetic/lib)
+    foreach(path /home/loic_dubois/Documents/pdm_crazyflie/catkin/devel/lib;/home/loic_dubois/Documents/pdm_crazyflie/catkin/devel/lib;/opt/ros/kinetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -145,7 +145,7 @@ foreach(library ${libraries})
   endif()
 endforeach()
 
-set(hector_quadrotor_teleop_EXPORTED_TARGETS "")
+set(hector_quadrotor_teleop_EXPORTED_TARGETS "hector_quadrotor_teleop_generate_messages_cpp;hector_quadrotor_teleop_generate_messages_eus;hector_quadrotor_teleop_generate_messages_lisp;hector_quadrotor_teleop_generate_messages_nodejs;hector_quadrotor_teleop_generate_messages_py")
 # create dummy targets for exported code generation targets to make life of users easier
 foreach(t ${hector_quadrotor_teleop_EXPORTED_TARGETS})
   if(NOT TARGET ${t})
@@ -153,7 +153,7 @@ foreach(t ${hector_quadrotor_teleop_EXPORTED_TARGETS})
   endif()
 endforeach()
 
-set(depends "roscpp;sensor_msgs;geometry_msgs;hector_uav_msgs")
+set(depends "roscpp;sensor_msgs;geometry_msgs;hector_uav_msgs;message_runtime")
 foreach(depend ${depends})
   string(REPLACE " " ";" depend_list ${depend})
   # the package name of the dependency must be kept in a unique variable so that it is not overwritten in recursive calls
@@ -182,7 +182,7 @@ foreach(depend ${depends})
   list(APPEND hector_quadrotor_teleop_EXPORTED_TARGETS ${${hector_quadrotor_teleop_dep}_EXPORTED_TARGETS})
 endforeach()
 
-set(pkg_cfg_extras "")
+set(pkg_cfg_extras "hector_quadrotor_teleop-msg-extras.cmake")
 foreach(extra ${pkg_cfg_extras})
   if(NOT IS_ABSOLUTE ${extra})
     set(extra ${hector_quadrotor_teleop_DIR}/${extra})

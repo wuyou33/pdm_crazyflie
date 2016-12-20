@@ -22,27 +22,6 @@ let RuddersCommand = require('./RuddersCommand.js');
 let MotorPWM = require('./MotorPWM.js');
 let VelocityZCommand = require('./VelocityZCommand.js');
 let AttitudeCommand = require('./AttitudeCommand.js');
-let LandingActionFeedback = require('./LandingActionFeedback.js');
-let PoseGoal = require('./PoseGoal.js');
-let PoseFeedback = require('./PoseFeedback.js');
-let TakeoffActionFeedback = require('./TakeoffActionFeedback.js');
-let LandingAction = require('./LandingAction.js');
-let TakeoffActionResult = require('./TakeoffActionResult.js');
-let PoseAction = require('./PoseAction.js');
-let PoseActionFeedback = require('./PoseActionFeedback.js');
-let TakeoffActionGoal = require('./TakeoffActionGoal.js');
-let LandingGoal = require('./LandingGoal.js');
-let LandingFeedback = require('./LandingFeedback.js');
-let TakeoffAction = require('./TakeoffAction.js');
-let LandingActionResult = require('./LandingActionResult.js');
-let LandingActionGoal = require('./LandingActionGoal.js');
-let TakeoffGoal = require('./TakeoffGoal.js');
-let LandingResult = require('./LandingResult.js');
-let PoseActionResult = require('./PoseActionResult.js');
-let PoseActionGoal = require('./PoseActionGoal.js');
-let PoseResult = require('./PoseResult.js');
-let TakeoffResult = require('./TakeoffResult.js');
-let TakeoffFeedback = require('./TakeoffFeedback.js');
 
 module.exports = {
   ThrustCommand: ThrustCommand,
@@ -66,25 +45,4 @@ module.exports = {
   MotorPWM: MotorPWM,
   VelocityZCommand: VelocityZCommand,
   AttitudeCommand: AttitudeCommand,
-  LandingActionFeedback: LandingActionFeedback,
-  PoseGoal: PoseGoal,
-  PoseFeedback: PoseFeedback,
-  TakeoffActionFeedback: TakeoffActionFeedback,
-  LandingAction: LandingAction,
-  TakeoffActionResult: TakeoffActionResult,
-  PoseAction: PoseAction,
-  PoseActionFeedback: PoseActionFeedback,
-  TakeoffActionGoal: TakeoffActionGoal,
-  LandingGoal: LandingGoal,
-  LandingFeedback: LandingFeedback,
-  TakeoffAction: TakeoffAction,
-  LandingActionResult: LandingActionResult,
-  LandingActionGoal: LandingActionGoal,
-  TakeoffGoal: TakeoffGoal,
-  LandingResult: LandingResult,
-  PoseActionResult: PoseActionResult,
-  PoseActionGoal: PoseActionGoal,
-  PoseResult: PoseResult,
-  TakeoffResult: TakeoffResult,
-  TakeoffFeedback: TakeoffFeedback,
 };
